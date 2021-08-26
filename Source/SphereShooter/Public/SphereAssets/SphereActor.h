@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
 #include "SphereActor.generated.h"
 
@@ -18,11 +17,11 @@ protected:
 	virtual void Destroyed() override;
 	UPROPERTY(BlueprintReadOnly, Category = "Components")
 	class USceneComponent* Root;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Components")
-	class UStaticMeshComponent* SphereMesh;
 	
 public:
 	ASphereActor();
+	UPROPERTY(BlueprintReadOnly, Category = "Components")
+	class UStaticMeshComponent* SphereMesh;
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

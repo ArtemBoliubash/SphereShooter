@@ -19,10 +19,16 @@ ASphereSpawner::ASphereSpawner()
 void ASphereSpawner::BeginPlay()
 {
 	Super::BeginPlay();
+	
+}
+
+void ASphereSpawner::SpawnSpheres()
+{
+	FActorSpawnParameters SpawnInfo;
 	for(int i = 0; i < Quantity; i++)
 	{
-		ASphereActor* SphereActor = NewObject<ASphereActor>(this);
-		SphereActor->AttachToComponent(Root, FAttachmentTransformRules::KeepWorldTransform);
+		AActor* SpawnedSphere =  GetWorld()->SpawnActor<ASphereActor>(FVector(FMath::VRand().X *FMath::RandRange(0,Radius), FMath::VRand().Y *FMath::RandRange(0,Radius), GetActorLocation().Z), FRotator(0,0,0), SpawnInfo);
+		Cast<ASphereActor>(SpawnedSphere)->SphereMesh->SetStaticMesh(SphereMesh);
 	}
 	
 }

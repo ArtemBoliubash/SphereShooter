@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "SphereActor.h"
 #include "GameFramework/Actor.h"
 #include "SphereSpawner.generated.h"
 
@@ -26,7 +25,11 @@ protected:
 	int32 Quantity;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int32 Radius;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UStaticMesh* SphereMesh;
 	virtual void BeginPlay() override;
+
+	void SpawnSpheres();
 
 public:	
 	// Called every frame
