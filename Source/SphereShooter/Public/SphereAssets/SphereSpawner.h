@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "SphereSpawner.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnQuantityDestroyedSpheresChange);
+
 UCLASS()
 class SPHERESHOOTER_API ASphereSpawner : public AActor
 {
@@ -14,8 +16,10 @@ class SPHERESHOOTER_API ASphereSpawner : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ASphereSpawner();
-	UPROPERTY(BlueprintReadOnly)
-	int32 DestroyedSphere;
+	UPROPERTY(BlueprintReadWrite)
+	int32 QuantityDestroyedSpheres;
+	UPROPERTY(BlueprintAssignable)
+	FOnQuantityDestroyedSpheresChange OnQuantityDestroyedSpheresChange;
 
 protected:
 	// Called when the game starts or when spawned
@@ -31,7 +35,8 @@ protected:
 	class ASphereShooterCharacter* Player;
 	virtual void BeginPlay() override;
 
-	void SpawnSpheres();
+	UFUNCTION(BlueprintCallable)
+	void SpawnSpheres(int32 IncreasingNumberSpheres, int32 IncreasingRadius);
 
 public:	
 	// Called every frame

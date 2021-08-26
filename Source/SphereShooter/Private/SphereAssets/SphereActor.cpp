@@ -27,7 +27,8 @@ void ASphereActor::BeginPlay()
 void ASphereActor::Destroyed()
 {
 	Super::Destroyed();
-	Spawner->DestroyedSphere += 1;
+	Spawner->QuantityDestroyedSpheres += 1;
+	Spawner->OnQuantityDestroyedSpheresChange.Broadcast();
 }
 
 // Called every frame

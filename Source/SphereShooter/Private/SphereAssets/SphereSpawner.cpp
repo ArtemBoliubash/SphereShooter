@@ -20,13 +20,21 @@ ASphereSpawner::ASphereSpawner()
 void ASphereSpawner::BeginPlay()
 {
 	Super::BeginPlay();
-	SpawnSpheres();
+	FActorSpawnParameters SpawnInfo;
+	for(int i = 0; i < Quantity; i++)
+	{
+		AActor* SpawnedSphere =  GetWorld()->SpawnActor<ASphereActor>(FVector(Player->GetActorLocation().X + FMath::VRand().X *FMath::RandRange(0,Radius), Player->GetActorLocation().Y + FMath::VRand().Y * FMath::RandRange(0,Radius), Player->GetActorLocation().Z + FMath::RandRange(0,Radius)), FRotator(0,0,0), SpawnInfo);
+		Cast<ASphereActor>(SpawnedSphere)->SphereMesh->SetStaticMesh(SphereMesh);
+		Cast<ASphereActor>(SpawnedSphere)->Spawner = this;
+	}
 	
 }
 
-void ASphereSpawner::SpawnSpheres()
+void ASphereSpawner::SpawnSpheres(int32 IncreasingNumberSpheres, int32 IncreasingRadius)
 {
 	FActorSpawnParameters SpawnInfo;
+	Quantity += Quantity*IncreasingNumberSpheres/100;
+	Radius += Radius*IncreasingRadius/100;
 	for(int i = 0; i < Quantity; i++)
 	{
 		AActor* SpawnedSphere =  GetWorld()->SpawnActor<ASphereActor>(FVector(Player->GetActorLocation().X + FMath::VRand().X *FMath::RandRange(0,Radius), Player->GetActorLocation().Y + FMath::VRand().Y * FMath::RandRange(0,Radius), Player->GetActorLocation().Z + FMath::RandRange(0,Radius)), FRotator(0,0,0), SpawnInfo);
