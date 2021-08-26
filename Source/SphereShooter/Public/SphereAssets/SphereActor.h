@@ -15,14 +15,17 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual void Destroyed() override;
+	//Root
 	UPROPERTY(BlueprintReadOnly, Category = "Components")
 	class USceneComponent* Root;
 
 	
 public:
 	ASphereActor();
+	//Mesh sphere
 	UPROPERTY(BlueprintReadOnly, Category = "Components")
 	class UStaticMeshComponent* SphereMesh;
+	//Spawner Owner Link
 	UPROPERTY(BlueprintReadOnly, Category = "Spawner")
 	class ASphereSpawner* Spawner;
 	// Called every frame

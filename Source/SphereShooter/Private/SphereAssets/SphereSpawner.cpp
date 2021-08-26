@@ -20,6 +20,7 @@ ASphereSpawner::ASphereSpawner()
 void ASphereSpawner::BeginPlay()
 {
 	Super::BeginPlay();
+	//Spawn firs wave
 	FActorSpawnParameters SpawnInfo;
 	for(int i = 0; i < Quantity; i++)
 	{

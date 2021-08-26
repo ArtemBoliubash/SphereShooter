@@ -28,9 +28,9 @@ void ASphereActor::BeginPlay()
 void ASphereActor::Destroyed()
 {
 	Super::Destroyed();
+	//Transferring information about destruction to the spawner
 	Spawner->QuantityDestroyedSpheres += 1;
 	Spawner->OnQuantityDestroyedSpheresChange.Broadcast();
-	FRotator Rotation(0.0f, 0.0f, 0.0f);
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Spawner->Particle, GetActorLocation());
 }
 
