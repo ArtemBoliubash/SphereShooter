@@ -3,6 +3,7 @@
 
 #include "SphereShooter/Public/SphereAssets/SphereActor.h"
 
+#include "Kismet/GameplayStatics.h"
 #include "SphereAssets/SphereSpawner.h"
 
 // Sets default values
@@ -29,6 +30,8 @@ void ASphereActor::Destroyed()
 	Super::Destroyed();
 	Spawner->QuantityDestroyedSpheres += 1;
 	Spawner->OnQuantityDestroyedSpheresChange.Broadcast();
+	FRotator Rotation(0.0f, 0.0f, 0.0f);
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Spawner->Particle, GetActorLocation());
 }
 
 // Called every frame

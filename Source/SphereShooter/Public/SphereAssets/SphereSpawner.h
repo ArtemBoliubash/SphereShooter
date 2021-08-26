@@ -20,7 +20,9 @@ public:
 	int32 QuantityDestroyedSpheres;
 	UPROPERTY(BlueprintAssignable)
 	FOnQuantityDestroyedSpheresChange OnQuantityDestroyedSpheresChange;
-
+	UPROPERTY(EditDefaultsOnly, Category = "Components")
+	UParticleSystem* Particle;
+	
 protected:
 	// Called when the game starts or when spawned
 	UPROPERTY(BlueprintReadOnly, Category = "Components")
