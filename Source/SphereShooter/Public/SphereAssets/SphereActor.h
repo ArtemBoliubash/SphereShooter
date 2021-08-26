@@ -17,11 +17,14 @@ protected:
 	virtual void Destroyed() override;
 	UPROPERTY(BlueprintReadOnly, Category = "Components")
 	class USceneComponent* Root;
+
 	
 public:
 	ASphereActor();
 	UPROPERTY(BlueprintReadOnly, Category = "Components")
 	class UStaticMeshComponent* SphereMesh;
+	UPROPERTY(BlueprintReadOnly, Category = "Spawner")
+	class ASphereSpawner* Spawner;
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

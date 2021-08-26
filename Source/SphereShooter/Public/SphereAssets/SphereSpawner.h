@@ -27,6 +27,8 @@ protected:
 	int32 Radius;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UStaticMesh* SphereMesh;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	class ASphereShooterCharacter* Player;
 	virtual void BeginPlay() override;
 
 	void SpawnSpheres();

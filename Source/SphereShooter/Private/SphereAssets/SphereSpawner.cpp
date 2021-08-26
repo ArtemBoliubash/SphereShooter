@@ -3,7 +3,8 @@
 
 #include "SphereShooter/Public/SphereAssets/SphereSpawner.h"
 
-#include "Kismet/KismetMathLibrary.h"
+#include "Character/SphereShooterCharacter.h"
+#include "SphereAssets/SphereActor.h"
 
 // Sets default values
 ASphereSpawner::ASphereSpawner()
@@ -19,6 +20,7 @@ ASphereSpawner::ASphereSpawner()
 void ASphereSpawner::BeginPlay()
 {
 	Super::BeginPlay();
+	SpawnSpheres();
 	
 }
 
@@ -27,8 +29,9 @@ void ASphereSpawner::SpawnSpheres()
 	FActorSpawnParameters SpawnInfo;
 	for(int i = 0; i < Quantity; i++)
 	{
-		AActor* SpawnedSphere =  GetWorld()->SpawnActor<ASphereActor>(FVector(FMath::VRand().X *FMath::RandRange(0,Radius), FMath::VRand().Y *FMath::RandRange(0,Radius), GetActorLocation().Z), FRotator(0,0,0), SpawnInfo);
+		AActor* SpawnedSphere =  GetWorld()->SpawnActor<ASphereActor>(FVector(Player->GetActorLocation().X + FMath::VRand().X *FMath::RandRange(0,Radius), Player->GetActorLocation().Y + FMath::VRand().Y * FMath::RandRange(0,Radius), Player->GetActorLocation().Z + FMath::RandRange(0,Radius)), FRotator(0,0,0), SpawnInfo);
 		Cast<ASphereActor>(SpawnedSphere)->SphereMesh->SetStaticMesh(SphereMesh);
+		Cast<ASphereActor>(SpawnedSphere)->Spawner = this;
 	}
 	
 }

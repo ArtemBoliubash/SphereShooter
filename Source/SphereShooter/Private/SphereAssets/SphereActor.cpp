@@ -3,6 +3,8 @@
 
 #include "SphereShooter/Public/SphereAssets/SphereActor.h"
 
+#include "SphereAssets/SphereSpawner.h"
+
 // Sets default values
 ASphereActor::ASphereActor()
 {
@@ -25,6 +27,7 @@ void ASphereActor::BeginPlay()
 void ASphereActor::Destroyed()
 {
 	Super::Destroyed();
+	Spawner->DestroyedSphere += 1;
 }
 
 // Called every frame
