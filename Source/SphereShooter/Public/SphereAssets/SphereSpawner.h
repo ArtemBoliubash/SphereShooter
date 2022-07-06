@@ -3,22 +3,21 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
 #include "SphereSpawner.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnQuantityDestroyedSpheresChange);
 
 UCLASS()
-class SPHERESHOOTER_API ASphereSpawner : public AActor
+class SPHERESHOOTER_API USphereSpawner : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ASphereSpawner();
+	USphereSpawner();
 	//Serves to refresh the wave
 	UPROPERTY(BlueprintReadWrite)
-	int32 QuantityDestroyedSpheres;
+	int WaveQuantityDestroyedSpheres = 0.f;
 	//Bind to change the number of destroyed spheres
 	UPROPERTY(BlueprintAssignable)
 	FOnQuantityDestroyedSpheresChange OnQuantityDestroyedSpheresChange;
@@ -26,30 +25,42 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Components")
 	UParticleSystem* Particle;
 	
-protected:
-	// Called when the game starts or when spawned
-	UPROPERTY(BlueprintReadOnly, Category = "Components")
-	class USceneComponent* Root;
+	UPROPERTY(BlueprintReadOnly)
+	int NewWaveQuantity = 0.f;
+
+	UPROPERTY(BlueprintReadOnly)
+	int Wave = 1.f;
+
+	UPROPERTY(BlueprintReadOnly)
+	int AllQuantityDestroyedSpheres = 0.f;
+
 	//Starting number of spheres
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	int32 Quantity;
+	int Quantity;
 	//Spawn radius
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	int32 Radius;
+	int Radius;
+
 	//Mesh sphere
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY( Transient )
 	UStaticMesh* SphereMesh;
+	
+	void SpawnFirstWave();
+
+	void OnQuantityDestroyedSpheresChanges();
+	
+protected:
+	
 	//Pointer to the player to spawn new waves
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	class ASphereShooterCharacter* Player;
-	virtual void BeginPlay() override;
+	
+	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 
+	virtual void Deinitialize() override;
+	
 	//Function for creating a new wave
 	UFUNCTION(BlueprintCallable)
 	void SpawnSpheres(int32 IncreasingNumberSpheres, int32 IncreasingRadius);
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
+	
 };

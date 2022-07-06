@@ -13,6 +13,23 @@ class ASphereShooterGameMode : public AGameModeBase
 
 public:
 	ASphereShooterGameMode();
+
+	UPROPERTY( EditAnywhere )
+	int Quantity;
+
+	UPROPERTY( EditAnywhere )
+	int Radius;
+
+	UPROPERTY( EditAnywhere )
+	int NewWaveQuantity;
+	
+	UPROPERTY( EditAnywhere )
+	UStaticMesh* SphereMesh;
+
+	UPROPERTY( EditAnywhere )
+	UParticleSystem* Particle;
+
+	virtual void BeginPlay() override;
 };
 
 

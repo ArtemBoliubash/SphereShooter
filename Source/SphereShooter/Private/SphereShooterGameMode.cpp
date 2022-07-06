@@ -2,13 +2,27 @@
 
 #include "SphereShooter/Public/SphereShooterGameMode.h"
 
+#include "SphereAssets/SphereSpawner.h"
 #include "UObject/ConstructorHelpers.h"
 
 ASphereShooterGameMode::ASphereShooterGameMode()
 	: Super()
 {
-	// set default pawn class to our Blueprinted character
-	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnClassFinder(TEXT("/Game/FirstPersonCPP/Blueprints/FirstPersonCharacter"));
-	DefaultPawnClass = PlayerPawnClassFinder.Class;
+}
+
+void ASphereShooterGameMode::BeginPlay()
+{
+	Super::BeginPlay();
+
+	GetGameInstance()->GetSubsystem<USphereSpawner>()->Radius = Radius;
 	
+	GetGameInstance()->GetSubsystem<USphereSpawner>()->Quantity = Quantity;
+	
+	GetGameInstance()->GetSubsystem<USphereSpawner>()->SphereMesh = SphereMesh;
+	
+	GetGameInstance()->GetSubsystem<USphereSpawner>()->Particle = Particle;
+	
+	GetGameInstance()->GetSubsystem<USphereSpawner>()->NewWaveQuantity = NewWaveQuantity;
+	
+	GetGameInstance()->GetSubsystem<USphereSpawner>()->SpawnFirstWave();
 }

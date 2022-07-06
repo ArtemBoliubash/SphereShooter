@@ -3,52 +3,63 @@
 
 #include "SphereShooter/Public/SphereAssets/SphereSpawner.h"
 
+#include "SphereShooterGameMode.h"
 #include "Character/SphereShooterCharacter.h"
+#include "NavigationSystem.h"
 #include "SphereAssets/SphereActor.h"
 
 // Sets default values
-ASphereSpawner::ASphereSpawner()
+USphereSpawner::USphereSpawner()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
-	SetRootComponent(Root);
-	PrimaryActorTick.bCanEverTick = true;
-
 }
 
-// Called when the game starts or when spawned
-void ASphereSpawner::BeginPlay()
+void USphereSpawner::OnQuantityDestroyedSpheresChanges()
 {
-	Super::BeginPlay();
-	//Spawn firs wave
-	FActorSpawnParameters SpawnInfo;
-	for(int i = 0; i < Quantity; i++)
+	if( WaveQuantityDestroyedSpheres >= NewWaveQuantity )
 	{
-		AActor* SpawnedSphere =  GetWorld()->SpawnActor<ASphereActor>(FVector(Player->GetActorLocation().X + FMath::VRand().X *FMath::RandRange(0,Radius), Player->GetActorLocation().Y + FMath::VRand().Y * FMath::RandRange(0,Radius), Player->GetActorLocation().Z + FMath::RandRange(0,Radius)), FRotator(0,0,0), SpawnInfo);
-		Cast<ASphereActor>(SpawnedSphere)->SphereMesh->SetStaticMesh(SphereMesh);
-		Cast<ASphereActor>(SpawnedSphere)->Spawner = this;
+		SpawnSpheres( 10, 5 );
+		WaveQuantityDestroyedSpheres = 0;
+		NewWaveQuantity += NewWaveQuantity / 10;
+		Wave++;
 	}
-	
 }
 
-void ASphereSpawner::SpawnSpheres(int32 IncreasingNumberSpheres, int32 IncreasingRadius)
+void USphereSpawner::SpawnSpheres(int32 IncreasingNumberSpheres, int32 IncreasingRadius)
 {
 	FActorSpawnParameters SpawnInfo;
 	Quantity += Quantity*IncreasingNumberSpheres/100;
 	Radius += Radius*IncreasingRadius/100;
+	SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
 	for(int i = 0; i < Quantity; i++)
 	{
 		AActor* SpawnedSphere =  GetWorld()->SpawnActor<ASphereActor>(FVector(Player->GetActorLocation().X + FMath::VRand().X *FMath::RandRange(0,Radius), Player->GetActorLocation().Y + FMath::VRand().Y * FMath::RandRange(0,Radius), Player->GetActorLocation().Z + FMath::RandRange(0,Radius)), FRotator(0,0,0), SpawnInfo);
 		Cast<ASphereActor>(SpawnedSphere)->SphereMesh->SetStaticMesh(SphereMesh);
-		Cast<ASphereActor>(SpawnedSphere)->Spawner = this;
 	}
 	
 }
 
-// Called every frame
-void ASphereSpawner::Tick(float DeltaTime)
+void USphereSpawner::SpawnFirstWave()
 {
-	Super::Tick(DeltaTime);
-
+	Player = Cast<ASphereShooterCharacter>( GetWorld()->GetFirstPlayerController()->GetPawn() );
+	//Spawn firs wave
+	FActorSpawnParameters SpawnInfo;
+	SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
+	for(int i = 0; i < Quantity; i++)
+	{
+		AActor* SpawnedSphere =  GetWorld()->SpawnActor<ASphereActor>(FVector(Player->GetActorLocation().X + FMath::VRand().X *FMath::RandRange(0,Radius), Player->GetActorLocation().Y + FMath::VRand().Y * FMath::RandRange(0,Radius), Player->GetActorLocation().Z + FMath::RandRange(0,Radius)), FRotator(0,0,0), SpawnInfo);
+		if( SpawnedSphere )
+		{
+			Cast<ASphereActor>(SpawnedSphere)->SphereMesh->SetStaticMesh(SphereMesh);
+		}
+	}
 }
 
+void USphereSpawner::Initialize(FSubsystemCollectionBase& Collection)
+{
+	Super::Initialize(Collection);
+}
+
+void USphereSpawner::Deinitialize()
+{
+	Super::Deinitialize();
+}
