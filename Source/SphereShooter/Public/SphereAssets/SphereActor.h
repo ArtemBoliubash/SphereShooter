@@ -3,11 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "GeometryCollection/GeometryCollectionActor.h"
 #include "SphereActor.generated.h"
 
 class USphereComponent;
 class ASphereSpawner;
+class URadialFalloff;
+class UFieldSystemComponent;
 
 UCLASS()
 class SPHERESHOOTER_API ASphereActor : public AActor
@@ -17,21 +19,21 @@ class SPHERESHOOTER_API ASphereActor : public AActor
 public:
 	
 	ASphereActor();
-	
 	//Root
 	UPROPERTY( BlueprintReadOnly, Category = "Components")
 	USceneComponent* Root;
 	
 	//Mesh sphere
-	UPROPERTY(BlueprintReadOnly, Category = "Components")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")
 	UStaticMeshComponent* SphereMesh;
-
-	//Collision sphere
-	UPROPERTY(BlueprintReadOnly, Category = "Components")
-	USphereComponent* SphereComponent;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Chaos")
+	TSubclassOf< AGeometryCollectionActor > ChaosClass;
 
 	virtual void BeginPlay() override;
+	
 	virtual void Destroyed() override;
+	
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

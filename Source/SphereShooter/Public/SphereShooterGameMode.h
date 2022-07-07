@@ -4,7 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "Particles/ParticleSystem.h"
 #include "SphereShooterGameMode.generated.h"
+
+class ASphereActor;
 
 UCLASS(minimalapi)
 class ASphereShooterGameMode : public AGameModeBase
@@ -15,19 +18,28 @@ public:
 	ASphereShooterGameMode();
 
 	UPROPERTY( EditAnywhere )
-	int Quantity;
+	int Quantity = 15;
 
 	UPROPERTY( EditAnywhere )
-	int Radius;
+	int Radius = 2000;
 
 	UPROPERTY( EditAnywhere )
-	int NewWaveQuantity;
+	float MinSize= 1.f;
+
+	UPROPERTY( EditAnywhere )
+	float ChangeSizeStep= 1.f;
+
+	UPROPERTY( EditAnywhere )
+	int NewWaveQuantity = 10;
 	
 	UPROPERTY( EditAnywhere )
-	UStaticMesh* SphereMesh;
+	UFXSystemAsset* Particle;
 
 	UPROPERTY( EditAnywhere )
-	UParticleSystem* Particle;
+	float ParticleSize = 1.f;
+	
+	UPROPERTY( EditAnywhere )
+	TSubclassOf< ASphereActor > SphereClass;
 
 	virtual void BeginPlay() override;
 };

@@ -3,7 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Particles/ParticleSystem.h"
 #include "SphereSpawner.generated.h"
+
+class ASphereActor;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnQuantityDestroyedSpheresChange);
 
@@ -23,7 +26,15 @@ public:
 	FOnQuantityDestroyedSpheresChange OnQuantityDestroyedSpheresChange;
 	//Spawns when sphere destroy
 	UPROPERTY(EditDefaultsOnly, Category = "Components")
-	UParticleSystem* Particle;
+	UFXSystemAsset* Particle;
+
+	float ParticleSize;
+	
+	float MinSize;
+	
+	float ChangeSizeStep;
+
+	float CurrentSize = 1.f;
 	
 	UPROPERTY(BlueprintReadOnly)
 	int NewWaveQuantity = 0.f;
@@ -43,7 +54,7 @@ public:
 
 	//Mesh sphere
 	UPROPERTY( Transient )
-	UStaticMesh* SphereMesh;
+	TSubclassOf< ASphereActor > SphereClass;
 	
 	void SpawnFirstWave();
 

@@ -2,9 +2,10 @@
 
 
 #include "SphereShooter/Public/SphereAssets/SphereActor.h"
-
-#include "Components/SphereComponent.h"
+#include "NiagaraFunctionLibrary.h"
+#include "GeometryCollection/GeometryCollectionComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Particles/ParticleSystemComponent.h"
 #include "SphereAssets/SphereSpawner.h"
 
 // Sets default values
@@ -12,14 +13,11 @@ ASphereActor::ASphereActor()
 {
 	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	SetRootComponent(Root);
+	
 	SphereMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SphereMesh"));
-	SphereMesh->SetupAttachment(Root);
-
-	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
-	SphereComponent->SetupAttachment(SphereMesh);
-	SphereComponent->SetSphereRadius( 124 );
-	SphereComponent->SetCollisionProfileName( "BlockAll" );
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	SphereMesh->SetupAttachment(RootComponent);
+	
+	//Disable tick
 	PrimaryActorTick.bCanEverTick = false;
 
 }
@@ -34,12 +32,30 @@ void ASphereActor::BeginPlay()
 void ASphereActor::Destroyed()
 {
 	Super::Destroyed();
+
 	//Transferring information about destruction to the spawner
-	GetGameInstance()->GetSubsystem<USphereSpawner>()->WaveQuantityDestroyedSpheres += 1;
-	GetGameInstance()->GetSubsystem<USphereSpawner>()->AllQuantityDestroyedSpheres += 1;
-	GetGameInstance()->GetSubsystem<USphereSpawner>()->OnQuantityDestroyedSpheresChanges();
-	GetGameInstance()->GetSubsystem<USphereSpawner>()->OnQuantityDestroyedSpheresChange.Broadcast();
-	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), GetGameInstance()->GetSubsystem<USphereSpawner>()->Particle, GetActorLocation());
+	if( GetGameInstance() )
+	{
+		USphereSpawner* SphereSpawner = GetGameInstance()->GetSubsystem<USphereSpawner>();
+		SphereSpawner->WaveQuantityDestroyedSpheres += 1;
+		SphereSpawner->AllQuantityDestroyedSpheres += 1;
+		SphereSpawner->OnQuantityDestroyedSpheresChanges();
+		SphereSpawner->OnQuantityDestroyedSpheresChange.Broadcast();
+		const float ParticleSize = SphereSpawner->ParticleSize - SphereSpawner->CurrentSize;
+		if( UParticleSystem* ParticleSystem = Cast< UParticleSystem >( SphereSpawner->Particle ) )
+		{
+			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ParticleSystem, GetActorLocation() )->SetWorldScale3D( FVector( ParticleSize ) );
+		}
+		 else if( UNiagaraSystem* NiagaraSystem = Cast< UNiagaraSystem >( SphereSpawner->Particle ) )
+		{
+		 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), NiagaraSystem, GetActorLocation(), FRotator::ZeroRotator, FVector( ParticleSize ) );
+		}
+
+		//Spawn Chaos Object
+		FActorSpawnParameters SpawnInfo;
+		AGeometryCollectionActor* GeometryCollectionActor = GetWorld()->SpawnActor< AGeometryCollectionActor >( ChaosClass.Get(), GetActorLocation(), FRotator(), SpawnInfo );
+		GeometryCollectionActor->SetActorScale3D( FVector( SphereSpawner->CurrentSize ));
+	}
 }
 
 // Called every frame

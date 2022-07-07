@@ -14,15 +14,23 @@ void ASphereShooterGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GetGameInstance()->GetSubsystem<USphereSpawner>()->Radius = Radius;
+	USphereSpawner* SphereSpawner = GetGameInstance()->GetSubsystem<USphereSpawner>();
+
+	SphereSpawner->Radius = Radius;
 	
-	GetGameInstance()->GetSubsystem<USphereSpawner>()->Quantity = Quantity;
+	SphereSpawner->Quantity = Quantity;
+
+	SphereSpawner->SphereClass = SphereClass;
 	
-	GetGameInstance()->GetSubsystem<USphereSpawner>()->SphereMesh = SphereMesh;
+	SphereSpawner->Particle = Particle;
 	
-	GetGameInstance()->GetSubsystem<USphereSpawner>()->Particle = Particle;
+	SphereSpawner->ParticleSize = ParticleSize;
+
+	SphereSpawner->MinSize = MinSize;
 	
-	GetGameInstance()->GetSubsystem<USphereSpawner>()->NewWaveQuantity = NewWaveQuantity;
+	SphereSpawner->ChangeSizeStep = ChangeSizeStep;
 	
-	GetGameInstance()->GetSubsystem<USphereSpawner>()->SpawnFirstWave();
+	SphereSpawner->NewWaveQuantity = NewWaveQuantity;
+	
+	SphereSpawner->SpawnFirstWave();
 }
