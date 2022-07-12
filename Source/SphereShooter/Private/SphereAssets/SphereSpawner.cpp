@@ -31,7 +31,7 @@ void USphereSpawner::SpawnSpheres(int32 IncreasingNumberSpheres, int32 Increasin
 	FActorSpawnParameters SpawnInfo;
 	Quantity += Quantity * IncreasingNumberSpheres / 100;
 	Radius += Radius * IncreasingRadius / 100;
-	if( MinSize < CurrentSize )
+	if( MinSize < CurrentSize && !FMath::IsNearlyEqual( MinSize, CurrentSize,  1E-03) )
 	{
 		CurrentSize -= ChangeSizeStep;
 	}
@@ -55,6 +55,7 @@ void USphereSpawner::SpawnSpheres(int32 IncreasingNumberSpheres, int32 Increasin
 			{
 				ASphereActor* SphereActor = GetWorld()->SpawnActor<ASphereActor>( SphereClass.Get(), RandPos, FRotator(0,0,0), SpawnInfo);
 				SphereActor->SetActorScale3D( FVector ( CurrentSize ) );
+				SphereActor->CurrentSize = CurrentSize;
 				break;
 			}
 		}
@@ -86,6 +87,7 @@ void USphereSpawner::SpawnFirstWave()
 			{
 				ASphereActor* SphereActor = GetWorld()->SpawnActor<ASphereActor>( SphereClass.Get(), RandPos, FRotator(0,0,0), SpawnInfo);
 				SphereActor->SetActorScale3D( FVector ( CurrentSize ) );
+				SphereActor->CurrentSize = CurrentSize;
 				break;
 			}
 		}

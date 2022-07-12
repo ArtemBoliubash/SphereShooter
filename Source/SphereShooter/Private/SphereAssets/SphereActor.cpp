@@ -54,7 +54,7 @@ void ASphereActor::Destroyed()
 		//Spawn Chaos Object
 		FActorSpawnParameters SpawnInfo;
 		AGeometryCollectionActor* GeometryCollectionActor = GetWorld()->SpawnActor< AGeometryCollectionActor >( ChaosClass.Get(), GetActorLocation(), FRotator(), SpawnInfo );
-		GeometryCollectionActor->SetActorScale3D( FVector( SphereSpawner->CurrentSize ));
+		GeometryCollectionActor->SetActorScale3D( FVector( CurrentSize ));
 	}
 }
 

@@ -23,6 +23,8 @@ public:
 	UPROPERTY( BlueprintReadOnly, Category = "Components")
 	USceneComponent* Root;
 	
+	float CurrentSize = 1.f;
+	
 	//Mesh sphere
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")
 	UStaticMeshComponent* SphereMesh;

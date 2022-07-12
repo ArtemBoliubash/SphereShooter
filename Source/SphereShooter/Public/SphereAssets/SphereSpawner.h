@@ -30,9 +30,9 @@ public:
 
 	float ParticleSize;
 	
-	float MinSize;
+	float MinSize = 0.1f;
 	
-	float ChangeSizeStep;
+	float ChangeSizeStep = 0.1f;
 
 	float CurrentSize = 1.f;
 	
