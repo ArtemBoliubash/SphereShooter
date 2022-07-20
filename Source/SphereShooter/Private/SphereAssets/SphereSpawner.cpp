@@ -6,6 +6,7 @@
 #include "SphereShooterGameMode.h"
 #include "Character/SphereShooterCharacter.h"
 #include "NavigationSystem.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "SphereAssets/SphereActor.h"
 
@@ -18,6 +19,21 @@ void USphereSpawner::OnQuantityDestroyedSpheresChanges()
 {
 	if( WaveQuantityDestroyedSpheres >= NewWaveQuantity )
 	{
+
+		//Win procedure ^_^
+		if( Wave == 14 )
+		{
+			TArray<AActor*> OutActors;
+			UGameplayStatics::GetAllActorsOfClass( GetWorld(), SphereClass.Get(), OutActors );
+			for( AActor* Actor: OutActors )
+			{
+				Actor->Destroy();
+			}
+			bIsPlayerWon = true;
+			Player->DisableInput( GetWorld()->GetFirstPlayerController() );
+			Wave++;
+			return;
+		}
 		//Spawn new wave and clear intermediate values
 		SpawnSpheres( 10, 5 );
 		WaveQuantityDestroyedSpheres = 0;

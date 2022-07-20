@@ -38,6 +38,8 @@ void ASphereShooterProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* Other
 	if(Cast<ASphereActor>(OtherActor))
 	{
 		OtherActor->Destroy();
+		FActorSpawnParameters SpawnInfo;
+		GetWorld()->SpawnActor< AActor >( FieldClass.Get(), GetActorLocation(), FRotator( 0, 0, 0 ), SpawnInfo );
 		Destroy();
 	}
 	// Only add impulse and destroy projectile if we hit a physics

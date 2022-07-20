@@ -20,7 +20,7 @@ public:
 	USphereSpawner();
 	//Serves to refresh the wave
 	UPROPERTY(BlueprintReadWrite)
-	int WaveQuantityDestroyedSpheres = 0.f;
+	int WaveQuantityDestroyedSpheres = 0;
 	//Bind to change the number of destroyed spheres
 	UPROPERTY(BlueprintAssignable)
 	FOnQuantityDestroyedSpheresChange OnQuantityDestroyedSpheresChange;
@@ -37,13 +37,16 @@ public:
 	float CurrentSize = 1.f;
 	
 	UPROPERTY(BlueprintReadOnly)
-	int NewWaveQuantity = 0.f;
+	int NewWaveQuantity = 0;
 
 	UPROPERTY(BlueprintReadOnly)
-	int Wave = 1.f;
+	int Wave = 1;
 
 	UPROPERTY(BlueprintReadOnly)
-	int AllQuantityDestroyedSpheres = 0.f;
+	int AllQuantityDestroyedSpheres = 0;
+
+	UPROPERTY(BlueprintReadOnly)
+	bool bIsPlayerWon = false;
 
 	//Starting number of spheres
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
